@@ -35,12 +35,14 @@ func main() {
 	done := make(chan bool)
 
 	// first goroutine sends random increasing numbers to stream
-	// and closes it after 10xx iterations
+	// and closes it after 1xxxx iterations
 	go func() {
-		for i := 1; i <= 100000; i++ {
-			// generate random nummber and send it to stream
+		for i := 1; i <= 1000; i++ {
+			// generate random nummber
 			rnd := int32(rand.Intn(i))
+			// prepare request
 			req := pb.Request{Num: rnd}
+			// send request to stream
 			if err := stream.Send(&req); err != nil {
 				log.Fatalf("can not send %v", err)
 			}
@@ -48,7 +50,7 @@ func main() {
 			// optional delay:			
 			time.Sleep(time.Millisecond * 20)
 		}
-		// end transmission
+		// end transmission (but keep ctx and conn)
 		if err := stream.CloseSend(); err != nil {
 			log.Println(err)
 		}
