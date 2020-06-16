@@ -10,7 +10,7 @@
 - protobuf installed
 - go support for protobuf installed
 
-## Complie
+## Compile
 
 make all
 
