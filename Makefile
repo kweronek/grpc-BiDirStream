@@ -8,11 +8,13 @@ protoc:
 server: protoc
 	@echo "Building server"
 	go build -o server \
-		github.com/pahanini/go-grpc-bidirectional-streaming-example/src/server
+	src/server
+// github.com/pahanini/go-grpc-bidirectional-streaming-example/src/server
 
 client: protoc
 	@echo "Building client"
 	go build -o client \
+	src/client
 		github.com/pahanini/go-grpc-bidirectional-streaming-example/src/client
 
 clean:
