@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+	// initialize random function with setting a seed
 	rand.Seed(time.Now().Unix())
 
 	// dail server
@@ -22,11 +23,11 @@ func main() {
 		log.Fatalf("can not connect with server %v", err)
 	}
 
-	// create stream
+	// create client using pb.New<ServiceName>Client(conn)
 	client := pb.NewMathClient(conn)
 	stream, err := client.Max(context.Background())
 	if err != nil {
-		log.Fatalf("openn stream error %v", err)
+		log.Fatalf("open stream error %v", err)
 	}
 
 	var max int32
@@ -34,7 +35,7 @@ func main() {
 	done := make(chan bool)
 
 	// first goroutine sends random increasing numbers to stream
-	// and closes int after 10xx iterations
+	// and closes it after 10xx iterations
 	go func() {
 		for i := 1; i <= 100000; i++ {
 			// generate random nummber and send it to stream
@@ -44,8 +45,10 @@ func main() {
 				log.Fatalf("can not send %v", err)
 			}
 			log.Printf("%d sent", req.Num)
-			//			time.Sleep(time.Millisecond * 20)
+			// optional delay:			
+			time.Sleep(time.Millisecond * 20)
 		}
+		// end transmission
 		if err := stream.CloseSend(); err != nil {
 			log.Println(err)
 		}
@@ -54,10 +57,10 @@ func main() {
 	// second goroutine receives data from stream
 	// and saves result in max variable
 	//
-	// if stream is finished it closes done channel
 	go func() {
 		for {
 			resp, err := stream.Recv()
+			// if stream receives EOF it closes done channel
 			if err == io.EOF {
 				close(done)
 				return
@@ -70,8 +73,7 @@ func main() {
 		}
 	}()
 
-	// third goroutine closes done channel
-	// if context is done
+	// third goroutine closes done channel if context is done
 	go func() {
 		<-ctx.Done()
 		if err := ctx.Err(); err != nil {
