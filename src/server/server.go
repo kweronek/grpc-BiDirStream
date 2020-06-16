@@ -13,7 +13,8 @@ import (
 type server struct{}
 
 func (s server) Max(srv pb.Math_MaxServer) error {
-
+	// uses pb.<Service>_<rpcName>Server
+	
 	log.Println("start new server")
 	var max, req_cnt int32
 	req_cnt = 0
@@ -33,7 +34,7 @@ func (s server) Max(srv pb.Math_MaxServer) error {
 		req_cnt++
 		if err == io.EOF {
 			// return will close stream from server side
-			log.Println("exit", req_cnt)
+			log.Println("exit", req_cnt-1)
 			return nil
 		}
 		if err != nil {
@@ -58,7 +59,7 @@ func (s server) Max(srv pb.Math_MaxServer) error {
 
 func main() {
 
-	// create listiner
+	// create listiner on socket
 	lis, err := net.Listen("tcp", ":50005")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -66,9 +67,10 @@ func main() {
 
 	// create grpc server
 	s := grpc.NewServer()
+	// register server by pb.Register<ServiceName>Server(s, server{})
 	pb.RegisterMathServer(s, server{})
 
-	// and start...
+	// and start ...
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
