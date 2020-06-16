@@ -64,6 +64,7 @@ func main() {
 			resp, err := stream.Recv()
 			// if stream receives EOF it closes done channel
 			if err == io.EOF {
+				log.Println("close(done) after EOF from server")
 				close(done)
 				return
 			}
