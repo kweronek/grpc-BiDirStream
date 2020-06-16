@@ -50,7 +50,7 @@ func main() {
 			// optional delay:			
 			time.Sleep(time.Millisecond * 20)
 		}
-		// end transmission (but keep ctx and conn)
+		// signal the server that there will be no more messages
 		if err := stream.CloseSend(); err != nil {
 			log.Println(err)
 		}
@@ -81,6 +81,7 @@ func main() {
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
+		log.Println("close(done)")
 		close(done)
 	}()
 
