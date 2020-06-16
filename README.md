@@ -2,7 +2,7 @@
 
 - client sends random numbers to server
 - server receives number and sends it back if the number greater than all previous numbers
-- both client and serever handle context errors (try to close client during send)
+- both client and server handle context errors (try to close client during send)
 
 ## Requirements
 
@@ -10,31 +10,13 @@
 - protobuf installed
 - go support for protobuf installed
 
-## Installation
-
-### MacOS
-
-```bash
-brew install go
-brew install protobuf
-go get -u github.com/golang/protobuf/protoc-gen-go
-```
-
-Make sure ```protoc-gen-go``` added in PATH
-
-### Linux
-
-TBD
-
 ## Complie
 
-```bash
 make all
-```
 
 It should create two binaries `server` and `client`
 
-## Use
+## Use (example)
 
 Start server `./server` and in other terminal start `./client`
 
