@@ -6,8 +6,9 @@ import (
 	"log"
 	"math/rand"
 
-	pb "github.com/pahanini/go-grpc-bidirectional-streaming-example/src/proto"
-
+//	pb "github.com/pahanini/go-grpc-bidirectional-streaming-example/src/proto"
+	pb "proto"
+	
 	"time"
 
 	"google.golang.org/grpc"
